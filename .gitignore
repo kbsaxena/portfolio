@@ -1,0 +1,80 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Virtual Environment
+.venv/
+venv/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Environment (CRITICAL — contains API keys and secrets)
+.env
+.env.local
+.env.production
+*.env
+backend/.env
+
+# Docker
+docker-compose.override.yml
+
+# Logs
+*.log
+logs/
+
+# Models (large files — downloaded at runtime)
+models/
+*.bin
+*.onnx
+*.safetensors
+.cache/
+huggingface/
+
+# Qdrant data
+qdrant_data/
+
+# Node
+node_modules/
+
+# Coverage
+coverage/
+htmlcov/
+.coverage
+.pytest_cache/
+
+# Evaluation results
+eval_results.json
+eval_results/
+
+# Backups
+backups/
+
+# Secrets and credentials (NEVER commit these)
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+credentials.json
+secrets.json
+**/secrets/
+**/credentials/
+cloudflare/*.json
+cloudflare/credentials*

@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /metrics
+
+Sitemap: https://kulbhushansaxena.dev/sitemap.xml

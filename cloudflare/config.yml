@@ -1,0 +1,13 @@
+# Cloudflare Tunnel Configuration Template
+# Replace <TUNNEL_ID> with your actual tunnel ID
+# Run: cloudflared tunnel create portfolio
+
+tunnel: <TUNNEL_ID>
+credentials-file: /etc/cloudflared/<TUNNEL_ID>.json
+
+ingress:
+  - hostname: kulbhushansaxena.dev
+    service: http://nginx:80
+  - hostname: www.kulbhushansaxena.dev
+    service: http://nginx:80
+  - service: http_status:404
