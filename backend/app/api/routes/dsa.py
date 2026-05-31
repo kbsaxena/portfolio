@@ -1,57 +1,54 @@
-"""DSA file browser endpoint."""
+"""DSA file browser API — serves file lists and code content."""
 
+import re
 from pathlib import Path
 
 from fastapi import APIRouter
 
-from app.core.exceptions import ValidationError
 from app.core.logging import get_logger
 
 logger = get_logger(__name__)
-
 router = APIRouter(prefix="/api/dsa", tags=["dsa"])
 
 DSA_DIR = Path(__file__).parent.parent.parent.parent / "data" / "dsa" / "src"
 
 
-@router.get("/files")
-async def list_dsa_files():
-    """List all DSA Java files."""
-    if not DSA_DIR.exists():
-        return {"files": []}
+@router.get("/categories/{category}")
+async def list_problems(category: str):
+    """List all Java files in a DSA category."""
+    category_dir = DSA_DIR / category
+    if not category_dir.exists() or not category_dir.is_dir():
+        return {"problems": [], "count": 0}
 
-    files: list[dict] = []
-    for java_file in sorted(DSA_DIR.rglob("*.java")):
-        relative = java_file.relative_to(DSA_DIR)
-        files.append(
-            {
-                "path": str(relative).replace("\\", "/"),
-                "name": java_file.stem,
-                "size": java_file.stat().st_size,
-            }
-        )
+    problems = []
+    for f in sorted(category_dir.rglob("*.java")):
+        name = f.stem
+        # Convert CamelCase to readable: "SumOfTwo" -> "Sum Of Two"
+        readable = re.sub(r"([A-Z])", r" \1", name).strip()
+        problems.append({
+            "file": f.name,
+            "name": readable,
+            "path": str(f.relative_to(DSA_DIR)).replace("\\", "/"),
+        })
 
-    return {"files": files, "total": len(files)}
+    return {"problems": problems, "count": len(problems)}
 
 
-@router.get("/file/{file_path:path}")
-async def get_dsa_file(file_path: str):
-    """Get contents of a specific DSA file."""
-    # Prevent path traversal
-    if ".." in file_path:
-        raise ValidationError("Invalid file path")
+@router.get("/code/{category}/{filename}")
+async def get_code(category: str, filename: str):
+    """Get the source code of a specific DSA file."""
+    category_dir = DSA_DIR / category
+    if not category_dir.exists():
+        return {"error": "Category not found", "code": ""}
 
-    full_path = DSA_DIR / file_path
-    if not full_path.exists() or not full_path.is_file():
-        raise ValidationError("File not found")
+    # Find the file (could be in subdirectory)
+    matches = list(category_dir.rglob(filename))
+    if not matches:
+        return {"error": "File not found", "code": ""}
 
-    if not str(full_path).startswith(str(DSA_DIR)):
-        raise ValidationError("Access denied")
-
-    content = full_path.read_text(encoding="utf-8")
-    return {
-        "path": file_path,
-        "name": full_path.stem,
-        "content": content,
-        "language": "java",
-    }
+    file_path = matches[0]
+    try:
+        code = file_path.read_text(encoding="utf-8")
+        return {"code": code, "file": filename, "category": category}
+    except Exception as e:
+        return {"error": str(e), "code": ""}

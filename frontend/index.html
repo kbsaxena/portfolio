@@ -26,13 +26,13 @@
 <body>
     <header class="header">
         <nav class="nav">
-            <a href="#hero" class="nav-brand"><span class="logo-k">K</span><span class="logo-s">S</span></a>
+            <a href="#hero" class="nav-brand"><span class="logo-k">K</span><span class="logo-b">B</span></a>
             <ul class="nav-links">
                 <li><a href="#about">About</a></li>
                 <li><a href="#skills">Skills</a></li>
                 <li><a href="#experience">Experience</a></li>
                 <li><a href="#projects">Projects</a></li>
-                <li><a href="#dsa">Fundamentals</a></li>
+                <li><a href="#dsa">Algorithms</a></li>
                 <li><a href="#contact">Contact</a></li>
                 <li><a href="#under-the-hood">Under the Hood</a></li>
             </ul>
@@ -63,9 +63,9 @@
         <section id="about" class="section">
             <h2>About Me</h2>
             <div class="about-content">
-                <p>Hands-on technical lead and senior individual contributor with experience driving architecture decisions, improving application performance, and delivering mission-critical solutions in Agile environments.</p>
-                <p>Skilled in AI-powered application development using LLMs, RAG, LangChain, LangGraph, MCP, and vector databases. Worked onsite with clients in Sydney, Australia, collaborating with global cross-functional teams.</p>
-                <p>Currently at <strong>Hexagon (Octave)</strong>, architecting an enterprise AI chat platform with 9 specialized agents, hybrid search, natural language-to-SQL, and real-time streaming infrastructure.</p>
+                <p><strong>Senior Software Lead with 13.5 years</strong> of experience in designing and developing scalable enterprise applications using <strong>Java, Python, Spring Boot, Microservices, and AWS</strong> cloud technologies. Strong expertise in distributed systems, system integrations, JVM performance tuning, and backend architecture for high-volume production environments.</p>
+                <p>Hands-on technical lead and senior individual contributor with experience driving architecture decisions, improving application performance, and delivering mission-critical solutions in Agile environments. Skilled in <strong>AI-powered application development using LLMs, RAG, LangChain, LangGraph, MCP, and vector databases</strong>.</p>
+                <p>Worked <strong>onsite with clients in Sydney, Australia</strong>, collaborating with global cross-functional teams. Currently at <strong>Hexagon (Octave)</strong>, architecting an enterprise AI chat platform with 9 specialized agents, hybrid search, natural language-to-SQL, and real-time streaming infrastructure.</p>
             </div>
         </section>
 
@@ -152,15 +152,18 @@
             <h2>Projects</h2>
             <div class="project-grid">
                 <div class="project-card"><h3>Enterprise AI Chat Platform</h3><p class="project-tech">PYTHON • FASTAPI • AWS BEDROCK • REDIS STREAMS • QDRANT</p><p>Multi-agent RAG platform with 9 specialized agents, hybrid search, real-time streaming, and multi-tenant security. Serves industrial customers across 6 languages.</p></div>
-                <div class="project-card"><h3>Portfolio AI Assistant</h3><p class="project-tech">PYTHON • FASTAPI • GROQ • BGE-M3 • QDRANT • SEARXNG</p><p>This website! Production-grade AI assistant with RAG hybrid search, multi-tool orchestration, circuit breaker patterns, and Cloudflare Tunnel deployment.</p></div>
-                <div class="project-card"><h3>Dataflow Studio</h3><p class="project-tech">JAVA 21 • SPRING BOOT • KUBERNETES • TERRAFORM</p><p>Scalable enterprise platform for data integration and workflow automation with automated infrastructure provisioning.</p></div>
+                <div class="project-card"><h3>Portfolio AI Assistant</h3><p class="project-tech">PYTHON • FASTAPI • GROQ • BGE-M3 • QDRANT • SEARXNG</p><p>This website! Production-grade AI assistant with RAG hybrid search, multi-tool orchestration, circuit breaker patterns, and Cloudflare Tunnel deployment. MAP@5 = 99.6%.</p></div>
+                <div class="project-card"><h3>Dataflow Studio</h3><p class="project-tech">JAVA 21 • SPRING BOOT • KUBERNETES • TERRAFORM</p><p>Scalable enterprise platform for data integration and workflow automation. Reduced DevOps efforts by 40% with automated infrastructure provisioning.</p></div>
+                <div class="project-card"><h3>Westlaw & KORU Platform</h3><p class="project-tech">JAVA • SPRING BOOT • SPRING INTEGRATION • AWS</p><p>Legal content transformation and delivery for Thomson Reuters. Large-scale content ingestion with XML pipelines and microservices architecture.</p></div>
+                <div class="project-card"><h3>My Verizon Prepaid</h3><p class="project-tech">JAVA 8 • SPRING MVC • ORACLE DB</p><p>Backend services for Verizon's prepaid mobile platform supporting account and service management for high-traffic mobile applications.</p></div>
+                <div class="project-card"><h3>Overture — Loan Origination</h3><p class="project-tech">JAVA • SPRING REST • HIBERNATE • POSTGRESQL</p><p>Enterprise loan origination system focused on underwriting, risk analysis, and automated credit decisioning.</p></div>
             </div>
         </section>
 
         <!-- Engineering Fundamentals (DSA) -->
         <section id="dsa" class="section">
-            <h2>Engineering Fundamentals</h2>
-            <p class="section-subtitle">Every system I architect starts with solid algorithmic thinking. 100+ problems solved — explore the code or ask the AI to explain.</p>
+            <h2>Algorithms & System Design Patterns</h2>
+            <p class="section-subtitle">The building blocks behind every scalable system I architect. 100+ implementations in Java — click to explore.</p>
             <div class="dsa-grid" id="dsaGrid">
                 <div class="dsa-card" data-category="arrays_and_arraylists"><span class="dsa-icon">📊</span><h4>Arrays</h4></div>
                 <div class="dsa-card" data-category="dp"><span class="dsa-icon">🧩</span><h4>Dynamic Programming</h4></div>
@@ -299,10 +302,10 @@
                 <div class="message assistant"><p class="message-content">Hi! Ask me about Kulbhushan's experience, projects, or tech stack. I can also compare technologies!</p></div>
             </div>
             <div class="chat-suggestions" id="chatSuggestions">
-                <button class="chat-suggestion" data-query="Tell me about the 9-agent AI system">9-agent system</button>
-                <button class="chat-suggestion" data-query="What's your experience with Kubernetes?">Kubernetes</button>
-                <button class="chat-suggestion" data-query="Compare FastAPI vs Spring Boot">FastAPI vs Spring</button>
-                <button class="chat-suggestion" data-query="Explain the two-sum solution">Two Sum</button>
+                <button class="chat-suggestion" data-query="What are Kulbhushan's key skills?">Key Skills</button>
+                <button class="chat-suggestion" data-query="Tell me about his work experience">Experience</button>
+                <button class="chat-suggestion" data-query="What projects has he built?">Projects</button>
+                <button class="chat-suggestion" data-query="What is his AI and RAG experience?">AI & RAG</button>
             </div>
             <div class="chat-status" id="chatStatus" style="display:none">
                 <div class="typing-indicator"><span></span><span></span><span></span></div>

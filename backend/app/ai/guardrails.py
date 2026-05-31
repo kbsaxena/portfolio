@@ -51,14 +51,7 @@ def detect_injection(text: str) -> bool:
 
 
 def sanitize_output(text: str) -> str:
-    """Strip system prompt fragments from output."""
+    """Strip system prompt fragments from output. Preserves whitespace."""
     for marker in _SYSTEM_PROMPT_MARKERS:
         text = text.replace(marker, "")
-    # Remove anything that looks like a system instruction leak
-    text = re.sub(
-        r"(You are an AI assistant|Your instructions are).*?(\.|$)",
-        "",
-        text,
-        flags=re.IGNORECASE,
-    )
-    return text.strip()
+    return text

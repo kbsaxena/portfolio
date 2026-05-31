@@ -28,31 +28,29 @@ async def process_message(
         # Step 1: Sanitize input
         sanitized = sanitize_input(message)
         if not sanitized:
-            yield {"event": "error", "data": "Empty message"}
+            yield {"event": "error", "data": {"message": "Empty message"}}
             return
 
         # Step 2: Check for injection
         if detect_injection(sanitized):
-            yield {
-                "event": "error",
-                "data": "I can't process that request.",
-            }
+            yield {"event": "token", "data": {"text": "I can only help with questions about the portfolio. How can I assist you?"}}
+            yield {"event": "done", "data": {"session_id": session_id}}
             return
 
         # Step 3: Classify query
-        yield {"event": "status", "data": "Thinking..."}
+        yield {"event": "status", "data": {"stage": "understanding"}}
         classification = await classify_query(sanitized)
         category = classification["category"]
 
         # Step 4: Execute tools
-        yield {"event": "status", "data": "Searching..."}
+        yield {"event": "status", "data": {"stage": "searching"}}
         tool_results = await _execute_tools(category, sanitized)
 
         # Step 5: Get conversation history
         history = session_memory.get_history(session_id)
 
         # Step 6: Synthesize and stream response
-        yield {"event": "status", "data": "Generating response..."}
+        yield {"event": "status", "data": {"stage": "generating"}}
         full_response = ""
 
         async for token in synthesize_response(
@@ -64,7 +62,7 @@ async def process_message(
             clean_token = sanitize_output(token)
             if clean_token:
                 full_response += clean_token
-                yield {"event": "token", "data": clean_token}
+                yield {"event": "token", "data": {"text": clean_token}}
 
         # Step 7: Emit citations
         for result in tool_results:
@@ -76,11 +74,12 @@ async def process_message(
         session_memory.add_message(session_id, "user", sanitized)
         session_memory.add_message(session_id, "assistant", full_response)
 
-        yield {"event": "done", "data": ""}
+        yield {"event": "done", "data": {"session_id": session_id}}
 
     except Exception as e:
         logger.error(f"Pipeline error: {e}", exc_info=True)
-        yield {"event": "error", "data": "Something went wrong. Please try again."}
+        yield {"event": "token", "data": {"text": "Something went wrong. Please try again."}}
+        yield {"event": "done", "data": {"session_id": session_id}}
 
 
 async def _execute_tools(category: str, query: str) -> list[dict]:

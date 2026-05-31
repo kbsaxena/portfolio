@@ -94,11 +94,17 @@
     });
 
     async function streamResponse(message) {
+        showStatus('Understanding your question...');
         var assistantDiv = appendMessage('assistant', '');
         var contentEl = assistantDiv.querySelector('.message-content');
+        contentEl.innerHTML = '<span class="typing-dots">●●●</span>';
         var fullText = '';
         var firstToken = true;
-        showStatus('Understanding your question...');
+        var userScrolled = false;
+
+        // Detect if user manually scrolls during streaming
+        var onScroll = function() { userScrolled = true; };
+        chatMessages.addEventListener('scroll', onScroll);
 
         try {
             var response = await fetch(API_URL, {
@@ -126,10 +132,14 @@
                         try {
                             var data = JSON.parse(lines[i].slice(6));
                             if (data.text !== undefined) {
-                                if (firstToken) { hideStatus(); firstToken = false; }
+                                if (firstToken) {
+                                    hideStatus();
+                                    firstToken = false;
+                                    // Scroll to TOP of assistant message so user reads from start
+                                    assistantDiv.scrollIntoView({ behavior: 'instant', block: 'start' });
+                                }
                                 fullText += data.text;
                                 contentEl.innerHTML = formatMarkdown(fullText) + '<span class="cursor">|</span>';
-                                scrollToBottom();
                             }
                             if (data.session_id) sessionId = data.session_id;
                             if (data.stage) showStatus(formatStage(data.stage));
@@ -138,15 +148,15 @@
                 }
             }
             contentEl.innerHTML = formatMarkdown(fullText);
-            incrementCounter();
-            showFollowUps(message);
+            if (fullText) { incrementCounter(); showFollowUps(message); }
+            else { contentEl.textContent = 'No response received. Please try again.'; }
         } catch (err) {
             hideStatus();
-            if (!fullText) contentEl.textContent = 'Connection lost. Please try again.';
+            if (!fullText) contentEl.textContent = 'Connection error. Please try again.';
         } finally {
             hideStatus();
             setSending(false);
-            scrollToBottom();
+            chatMessages.removeEventListener('scroll', onScroll);
         }
     }
 
@@ -172,10 +182,13 @@
     }
     function getFollowUps(q) {
         q = q.toLowerCase();
-        if (q.includes('skill') || q.includes('tech')) return ['Tell me about his AI projects', 'What cloud platforms does he use?'];
-        if (q.includes('ai') || q.includes('rag')) return ['How does the streaming work?', 'What databases does he use?'];
-        if (q.includes('experience') || q.includes('work')) return ['What projects has he built?', 'What are his key achievements?'];
-        return ['What are his key skills?', 'Tell me about his projects'];
+        if (q.includes('skill') || q.includes('tech')) return ['What AI tools does he use?', 'Tell me about his cloud experience'];
+        if (q.includes('ai') || q.includes('rag') || q.includes('agent')) return ['How does the streaming work?', 'What vector databases does he use?'];
+        if (q.includes('experience') || q.includes('work') || q.includes('company')) return ['What was his role at EPAM?', 'Tell me about the Hexagon AI platform'];
+        if (q.includes('project')) return ['How did he build this portfolio AI?', 'What is Dataflow Studio?'];
+        if (q.includes('kubernetes') || q.includes('cloud') || q.includes('docker')) return ['What CI/CD tools does he use?', 'Tell me about his DevOps experience'];
+        if (q.includes('java') || q.includes('spring')) return ['Does he use Python too?', 'What frameworks does he know?'];
+        return ['What makes him unique?', 'How can I contact him?'];
     }
 
     function incrementCounter() {
@@ -190,10 +203,12 @@
         html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
         html = html.replace(/^### (.+)$/gm, '<h4>$1</h4>');
         html = html.replace(/^## (.+)$/gm, '<h3>$1</h3>');
-        html = html.replace(/^- (.+)/gm, '• $1');
-        html = html.replace(/\n\n/g, '<br><br>');
+        html = html.replace(/^\* (.+)/gm, '<li>$1</li>');
+        html = html.replace(/^- (.+)/gm, '<li>$1</li>');
+        html = html.replace(/(<li>.*<\/li>\n?)+/g, '<ul>$&</ul>');
+        html = html.replace(/\n\n/g, '</p><p>');
         html = html.replace(/\n/g, '<br>');
-        return html;
+        return '<p>' + html + '</p>';
     }
 
     function appendMessage(role, text) {
@@ -204,7 +219,8 @@
         if (text) p.innerHTML = formatMarkdown(text);
         div.appendChild(p);
         chatMessages.appendChild(div);
-        scrollToBottom();
+        // Only scroll to bottom for user messages (so user sees their own message)
+        if (role === 'user') scrollToBottom();
         return div;
     }
 
@@ -230,9 +246,34 @@
                 timelineObserver.unobserve(entry.target);
             }
         });
-    }, { threshold: 0.2 });
+    }, { threshold: 0.15 });
     document.querySelectorAll('.timeline-item').forEach(function (item) {
         timelineObserver.observe(item);
+    });
+
+    // Timeline line animation
+    var timeline = document.querySelector('.timeline');
+    if (timeline) {
+        var lineObserver = new IntersectionObserver(function (entries) {
+            if (entries[0].isIntersecting) {
+                timeline.classList.add('line-animated');
+                lineObserver.unobserve(timeline);
+            }
+        }, { threshold: 0.2 });
+        lineObserver.observe(timeline);
+    }
+
+    // Section scroll animation
+    var sectionObserver = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                sectionObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.section').forEach(function (sec) {
+        sectionObserver.observe(sec);
     });
 
     // Skill cards expand
@@ -305,20 +346,36 @@
     if (codeAskAI) codeAskAI.addEventListener('click', function () { openChat(); chatInput.value = 'Explain the ' + currentFileName + ' algorithm — how it works, time complexity, and space complexity'; chatForm.dispatchEvent(new Event('submit')); });
 
     function typeCode(code, el) {
-        el.textContent = '';
-        var lines = code.split('\n');
+        el.innerHTML = '';
+        var highlighted = highlightJava(code);
+        var lines = highlighted.split('\n');
         var i = 0;
         function next() {
             if (i >= lines.length) return;
-            var span = document.createElement('div');
-            span.className = 'code-line';
-            span.style.animationDelay = (i * 0.03) + 's';
-            span.textContent = lines[i];
-            el.appendChild(span);
+            var div = document.createElement('div');
+            div.className = 'code-line';
+            div.style.animationDelay = (i * 0.02) + 's';
+            div.innerHTML = lines[i];
+            el.appendChild(div);
             i++;
-            if (i < lines.length) setTimeout(next, 25);
+            if (i < lines.length) setTimeout(next, 20);
         }
         next();
+    }
+
+    function highlightJava(code) {
+        var html = escapeHtml(code);
+        // Keywords
+        html = html.replace(/\b(public|private|protected|static|void|int|long|double|float|boolean|char|String|class|interface|extends|implements|return|if|else|for|while|do|switch|case|break|continue|new|this|super|try|catch|finally|throw|throws|import|package|final|abstract|synchronized|volatile|transient|null|true|false)\b/g, '<span class="kw">$1</span>');
+        // Strings
+        html = html.replace(/(&quot;[^&]*?&quot;)/g, '<span class="str">$1</span>');
+        // Comments
+        html = html.replace(/(\/\/.*)/g, '<span class="cmt">$1</span>');
+        // Numbers
+        html = html.replace(/\b(\d+)\b/g, '<span class="num">$1</span>');
+        // Annotations
+        html = html.replace(/(@\w+)/g, '<span class="ann">$1</span>');
+        return html;
     }
 
     // Theme
