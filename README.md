@@ -1,5 +1,9 @@
 # AI-Powered Portfolio
 
+**Author:** Kulbhushan Saxena (KB)  
+**Year:** 2026  
+**License:** MIT
+
 An intelligent portfolio website with a RAG-powered conversational AI assistant that answers questions about my professional experience using vector search, LLM generation, and web search fallback.
 
 ## Architecture

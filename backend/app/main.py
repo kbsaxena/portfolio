@@ -1,4 +1,8 @@
-"""FastAPI application entry point."""
+"""
+Portfolio AI Assistant — FastAPI Backend
+Author: Kulbhushan Saxena (KB)
+Year: 2026
+"""
 
 from contextlib import asynccontextmanager
 from pathlib import Path

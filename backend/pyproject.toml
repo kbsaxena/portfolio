@@ -2,6 +2,7 @@
 name = "portfolio-backend"
 version = "1.0.0"
 description = "AI-powered portfolio backend with RAG pipeline"
+authors = [{name = "Kulbhushan Saxena (KB)", email = "kulbhushan.saxena09@gmail.com"}]
 requires-python = ">=3.12"
 
 [tool.ruff]
