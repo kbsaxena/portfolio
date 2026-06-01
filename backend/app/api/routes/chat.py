@@ -7,6 +7,7 @@ from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
 
 from app.ai.orchestrator import process_message
+from app.api.routes.stats import increment_questions_answered
 from app.core.logging import get_logger
 
 logger = get_logger(__name__)
@@ -24,13 +25,21 @@ async def chat(request: Request, body: ChatRequest):
     """Stream a chat response via Server-Sent Events."""
 
     async def event_stream():
+        has_content = False
         async for event in process_message(
             message=body.message,
             session_id=body.session_id,
         ):
             event_type = event.get("event", "message")
             data = event.get("data", "")
+            if data and isinstance(data, dict) and data.get("text"):
+                has_content = True
             yield f"event: {event_type}\ndata: {json.dumps(data)}\n\n"
+
+        # Increment global counter after successful response
+        if has_content:
+            new_count = await increment_questions_answered()
+            yield f"data: {json.dumps({'questions_answered': new_count})}\n\n"
 
     return StreamingResponse(
         event_stream(),

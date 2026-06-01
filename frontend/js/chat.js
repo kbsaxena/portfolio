@@ -4,7 +4,7 @@
     var API_URL = '/api/chat';
     var sessionId = null;
     var isSending = false;
-    var questionsAnswered = parseInt(localStorage.getItem('questionsAnswered') || '47');
+    var questionsAnswered = 47;
 
     // DOM elements (matching IDs in index.html)
     var chatToggle = document.getElementById('chatToggle');
@@ -22,6 +22,14 @@
     var questionsEl = document.getElementById('questionsAnswered');
 
     if (questionsEl) questionsEl.textContent = questionsAnswered;
+
+    // Fetch global counter from server
+    fetch('/api/stats').then(function(r) { return r.json(); }).then(function(data) {
+        if (data.questions_answered) {
+            questionsAnswered = data.questions_answered;
+            if (questionsEl) questionsEl.textContent = questionsAnswered;
+        }
+    }).catch(function() {});
 
     // Chat prompt on scroll
     var promptShown = false;
@@ -87,6 +95,8 @@
         var message = chatInput.value.trim();
         if (!message || isSending) return;
         if (chatSuggestions) chatSuggestions.style.display = 'none';
+        // Remove previous follow-up suggestions
+        document.querySelectorAll('.follow-ups').forEach(function(el) { el.remove(); });
         appendMessage('user', message);
         chatInput.value = '';
         setSending(true);
@@ -143,12 +153,13 @@
                             }
                             if (data.session_id) sessionId = data.session_id;
                             if (data.stage) showStatus(formatStage(data.stage));
+                            if (data.questions_answered) incrementCounter(data.questions_answered);
                         } catch (err) {}
                     }
                 }
             }
             contentEl.innerHTML = formatMarkdown(fullText);
-            if (fullText) { incrementCounter(); showFollowUps(message); }
+            if (fullText) { showFollowUps(message); }
             else { contentEl.textContent = 'No response received. Please try again.'; }
         } catch (err) {
             hideStatus();
@@ -178,22 +189,39 @@
             if (btn && !isSending) { chatInput.value = btn.getAttribute('data-query'); chatForm.dispatchEvent(new Event('submit')); div.remove(); }
         });
         chatMessages.appendChild(div);
-        scrollToBottom();
     }
     function getFollowUps(q) {
         q = q.toLowerCase();
-        if (q.includes('skill') || q.includes('tech')) return ['What AI tools does he use?', 'Tell me about his cloud experience'];
-        if (q.includes('ai') || q.includes('rag') || q.includes('agent')) return ['How does the streaming work?', 'What vector databases does he use?'];
-        if (q.includes('experience') || q.includes('work') || q.includes('company')) return ['What was his role at EPAM?', 'Tell me about the Hexagon AI platform'];
-        if (q.includes('project')) return ['How did he build this portfolio AI?', 'What is Dataflow Studio?'];
-        if (q.includes('kubernetes') || q.includes('cloud') || q.includes('docker')) return ['What CI/CD tools does he use?', 'Tell me about his DevOps experience'];
-        if (q.includes('java') || q.includes('spring')) return ['Does he use Python too?', 'What frameworks does he know?'];
-        return ['What makes him unique?', 'How can I contact him?'];
+        // DSA-specific follow-ups based on the actual topic
+        if (q.includes('two sum') || q.includes('array')) return ['How would you optimize this for sorted arrays?', 'What other array problems has he solved?'];
+        if (q.includes('binary search')) return ['When do you use binary search on answer?', 'What is the time complexity of binary search?'];
+        if (q.includes('linked list') || q.includes('reverse')) return ['How to detect a cycle in linked list?', 'What is the difference between singly and doubly linked list?'];
+        if (q.includes('tree') || q.includes('bst') || q.includes('traversal')) return ['What is the difference between BFS and DFS?', 'How to find lowest common ancestor?'];
+        if (q.includes('graph') || q.includes('bfs') || q.includes('dfs') || q.includes('dijkstra')) return ['How to detect cycles in a directed graph?', 'What is topological sort used for?'];
+        if (q.includes('dp') || q.includes('dynamic') || q.includes('knapsack') || q.includes('fibonacci')) return ['What is the difference between memoization and tabulation?', 'How to identify if a problem needs DP?'];
+        if (q.includes('sort') || q.includes('merge') || q.includes('quick')) return ['Which sorting algorithm is best for large datasets?', 'What is the space complexity of merge sort?'];
+        if (q.includes('stack') || q.includes('queue') || q.includes('parenthes')) return ['What problems are best solved with stacks?', 'How to implement a queue using stacks?'];
+        if (q.includes('heap') || q.includes('priority')) return ['When to use min-heap vs max-heap?', 'How to find kth largest element?'];
+        if (q.includes('greedy')) return ['How to know if greedy approach works?', 'What is the difference between greedy and DP?'];
+        if (q.includes('backtrack') || q.includes('permut') || q.includes('subset')) return ['What is the time complexity of generating permutations?', 'How is backtracking different from brute force?'];
+        if (q.includes('string') || q.includes('palindrome') || q.includes('anagram')) return ['What string algorithms does he know?', 'How to check if two strings are anagrams?'];
+        // Portfolio-specific follow-ups
+        if (q.includes('explain') || q.includes('algorithm') || q.includes('code')) return ['What is the time complexity of this?', 'What real-world problems use this pattern?'];
+        if (q.includes('skill') || q.includes('tech') || q.includes('stack')) return ['How does he apply AI in his work?', 'What cloud platforms has he used?'];
+        if (q.includes('ai') || q.includes('rag') || q.includes('agent') || q.includes('llm')) return ['How many agents did he build?', 'What is the RAG architecture he uses?'];
+        if (q.includes('experience') || q.includes('work') || q.includes('hexagon') || q.includes('epam')) return ['What was his biggest achievement?', 'How long has he worked with Java?'];
+        if (q.includes('project') || q.includes('portfolio') || q.includes('dataflow')) return ['How does this AI assistant work?', 'What is the tech stack of this site?'];
+        if (q.includes('kubernetes') || q.includes('docker') || q.includes('cloud') || q.includes('aws')) return ['How did he reduce DevOps efforts by 40%?', 'What deployment strategies does he use?'];
+        if (q.includes('java') || q.includes('spring') || q.includes('python') || q.includes('fastapi')) return ['Which does he prefer — Java or Python?', 'What frameworks has he used?'];
+        return ['Tell me about his AI experience', 'What projects has he built?'];
     }
 
-    function incrementCounter() {
-        questionsAnswered++;
-        localStorage.setItem('questionsAnswered', questionsAnswered.toString());
+    function incrementCounter(serverCount) {
+        if (serverCount) {
+            questionsAnswered = serverCount;
+        } else {
+            questionsAnswered++;
+        }
         if (questionsEl) questionsEl.textContent = questionsAnswered;
     }
 
@@ -206,9 +234,9 @@
         html = html.replace(/^\* (.+)/gm, '<li>$1</li>');
         html = html.replace(/^- (.+)/gm, '<li>$1</li>');
         html = html.replace(/(<li>.*<\/li>\n?)+/g, '<ul>$&</ul>');
-        html = html.replace(/\n\n/g, '</p><p>');
+        html = html.replace(/\n\n+/g, '<br>');
         html = html.replace(/\n/g, '<br>');
-        return '<p>' + html + '</p>';
+        return html;
     }
 
     function appendMessage(role, text) {
@@ -274,6 +302,11 @@
     }, { threshold: 0.1 });
     document.querySelectorAll('.section').forEach(function (sec) {
         sectionObserver.observe(sec);
+    });
+
+    // Accordion animation
+    document.querySelectorAll('.accordion').forEach(function (acc) {
+        sectionObserver.observe(acc);
     });
 
     // Skill cards expand
@@ -364,18 +397,34 @@
     }
 
     function highlightJava(code) {
-        var html = escapeHtml(code);
-        // Keywords
-        html = html.replace(/\b(public|private|protected|static|void|int|long|double|float|boolean|char|String|class|interface|extends|implements|return|if|else|for|while|do|switch|case|break|continue|new|this|super|try|catch|finally|throw|throws|import|package|final|abstract|synchronized|volatile|transient|null|true|false)\b/g, '<span class="kw">$1</span>');
-        // Strings
-        html = html.replace(/(&quot;[^&]*?&quot;)/g, '<span class="str">$1</span>');
-        // Comments
-        html = html.replace(/(\/\/.*)/g, '<span class="cmt">$1</span>');
-        // Numbers
-        html = html.replace(/\b(\d+)\b/g, '<span class="num">$1</span>');
-        // Annotations
-        html = html.replace(/(@\w+)/g, '<span class="ann">$1</span>');
-        return html;
+        // Process line by line to handle comments properly
+        return code.split('\n').map(function(line) {
+            var html = escapeHtml(line);
+            // Check if line is a comment first
+            var trimmed = html.trim();
+            if (trimmed.startsWith('//')) {
+                if (/TC|SC|Time|Space|Complexity|O\(/i.test(trimmed)) {
+                    return '<span class="cmt-tc">' + html + '</span>';
+                }
+                return '<span class="cmt">' + html + '</span>';
+            }
+            // Keywords
+            html = html.replace(/\b(public|private|protected|static|void|int|long|double|float|boolean|char|String|class|interface|extends|implements|return|if|else|for|while|do|switch|case|break|continue|new|this|super|try|catch|finally|throw|throws|import|package|final|abstract|synchronized|volatile|transient|null|true|false)\b/g, '<span class="kw">$1</span>');
+            // Class names (PascalCase identifiers not already wrapped in a span)
+            html = html.replace(/(>|^)([^<]*)/g, function(match, prefix, text) {
+                var replaced = text.replace(/\b([A-Z][a-zA-Z0-9]*)\b/g, '<span class="cls">$1</span>');
+                return prefix + replaced;
+            });
+            // Method names (lowercase word before parenthesis)
+            html = html.replace(/\b([a-z]\w*)\s*(?=\()/g, '<span class="method">$1</span>');
+            // Strings
+            html = html.replace(/(&quot;[^&]*?&quot;)/g, '<span class="str">$1</span>');
+            // Numbers
+            html = html.replace(/\b(\d+)\b/g, '<span class="num">$1</span>');
+            // Annotations
+            html = html.replace(/(@\w+)/g, '<span class="ann">$1</span>');
+            return html;
+        }).join('\n');
     }
 
     // Theme

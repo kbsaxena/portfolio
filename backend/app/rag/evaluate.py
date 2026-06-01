@@ -67,8 +67,13 @@ async def evaluate_retriever(
         query = test["query"]
         relevant = test["relevant"]
 
-        search_results = await retriever.search(query, top_k=k)
-        retrieved = [r["source"] for r in search_results]
+        try:
+            search_results = await retriever.search(query, top_k=k)
+            retrieved = [r["source"] for r in search_results]
+            print(f"  ✓ '{query[:40]}...' → {len(search_results)} results")
+        except Exception as e:
+            print(f"  ✗ '{query[:40]}...' → ERROR: {e}")
+            retrieved = []
 
         results.append({"relevant": relevant, "retrieved": retrieved})
 
@@ -79,20 +84,63 @@ async def evaluate_retriever(
 
 
 if __name__ == "__main__":
-    # Example evaluation
+    from app.ai.embeddings import embedding_service
+
     test_queries = [
         {
             "query": "What programming languages does Kulbhushan know?",
-            "relevant": ["skills.md", "resume.md"],
+            "relevant": ["resume.md"],
         },
         {
             "query": "What projects has Kulbhushan worked on?",
-            "relevant": ["projects.md", "experience.md"],
+            "relevant": ["projects.md"],
+        },
+        {
+            "query": "Tell me about the enterprise AI chat platform",
+            "relevant": ["resume.md", "projects.md"],
+        },
+        {
+            "query": "What is Kulbhushan's experience with Kubernetes?",
+            "relevant": ["resume.md"],
+        },
+        {
+            "query": "Explain the two sum problem",
+            "relevant": ["DSA"],
+        },
+        {
+            "query": "What databases does Kulbhushan know?",
+            "relevant": ["resume.md"],
+        },
+        {
+            "query": "Tell me about RAG and vector databases experience",
+            "relevant": ["resume.md", "projects.md"],
+        },
+        {
+            "query": "Where did Kulbhushan work before Hexagon?",
+            "relevant": ["resume.md"],
+        },
+        {
+            "query": "How does the natural language to SQL engine work?",
+            "relevant": ["resume.md", "projects.md"],
+        },
+        {
+            "query": "What is Kulbhushan's education?",
+            "relevant": ["resume.md"],
         },
     ]
 
     async def main():
+        print("Loading embedding model...")
+        await embedding_service.warmup()
+        if not embedding_service.is_ready:
+            print("ERROR: Embedding model failed to load!")
+            return
+        print(f"Model loaded: {embedding_service.is_ready}")
+        print("Running evaluation (10 queries)...")
         result = await evaluate_retriever(test_queries)
-        print(f"Evaluation: {result}")
+        print(f"\n{'='*50}")
+        print(f"  MAP@{result['k']} = {result['map_at_k']:.4f}")
+        print(f"  Queries evaluated: {result['num_queries']}")
+        print(f"{'='*50}")
 
     asyncio.run(main())

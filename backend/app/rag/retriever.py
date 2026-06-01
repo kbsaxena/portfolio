@@ -39,8 +39,8 @@ class HybridRetriever:
 
         try:
             # Encode query
-            embeddings = await embedding_service.encode_single(query)
-            dense_vector = embeddings["dense_vecs"][0].tolist()
+            embedding = await embedding_service.encode_single(query)
+            dense_vector = embedding["dense_vecs"][0].tolist()
 
             # Dense search using NamedVector
             results = self.client.query_points(

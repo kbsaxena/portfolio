@@ -14,7 +14,7 @@ from fastapi.staticfiles import StaticFiles
 
 from app.ai.embeddings import embedding_service
 from app.ai.tools.registry import register_default_tools
-from app.api.routes import chat, contact, dsa, execute, health, ingest, metrics
+from app.api.routes import chat, contact, dsa, execute, health, ingest, metrics, stats
 from app.config import settings
 from app.core.exceptions import AppError
 from app.core.logging import get_logger, setup_logging
@@ -99,6 +99,7 @@ app.include_router(execute.router)
 app.include_router(health.router)
 app.include_router(ingest.router)
 app.include_router(metrics.router)
+app.include_router(stats.router)
 
 # --- Static files (dev mode) ---
 if not settings.is_production:
