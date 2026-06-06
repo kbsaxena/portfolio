@@ -4,7 +4,6 @@
     var API_URL = '/api/chat';
     var sessionId = null;
     var isSending = false;
-    var questionsAnswered = 47;
 
     // DOM elements (matching IDs in index.html)
     var chatToggle = document.getElementById('chatToggle');
@@ -19,39 +18,36 @@
     var statusText = document.getElementById('statusText');
     var chatPrompt = document.getElementById('chatPrompt');
     var chatPromptClose = document.getElementById('chatPromptClose');
-    var questionsEl = document.getElementById('questionsAnswered');
+    var questionsEl = document.getElementById('questionsAsked');
+    var visitorsEl = document.getElementById('visitorsCount');
 
-    if (questionsEl) questionsEl.textContent = questionsAnswered;
-
-    // Fetch global counter from server
+    // Fetch global stats from server
     fetch('/api/stats').then(function(r) { return r.json(); }).then(function(data) {
-        if (data.questions_answered) {
-            questionsAnswered = data.questions_answered;
-            if (questionsEl) questionsEl.textContent = questionsAnswered;
-        }
+        if (data.questions_asked !== undefined && questionsEl) questionsEl.textContent = data.questions_asked;
+        if (data.visitors !== undefined && visitorsEl) visitorsEl.textContent = data.visitors;
     }).catch(function() {});
 
     // Chat prompt on scroll
+    // Chat prompt — shows after 5 seconds OR on first scroll
     var promptShown = false;
-    window.addEventListener('scroll', function () {
-        if (promptShown) return;
-        if (window.scrollY > 400 && !localStorage.getItem('promptDismissed') && chatPanel.style.display !== 'flex') {
+    function showPrompt() {
+        if (!promptShown && chatPanel.style.display !== 'flex') {
             chatPrompt.style.display = 'flex';
             promptShown = true;
         }
-    }, { passive: true });
+    }
+    setTimeout(showPrompt, 5000);
+    window.addEventListener('scroll', function() { showPrompt(); }, { passive: true, once: true });
 
     if (chatPromptClose) {
         chatPromptClose.addEventListener('click', function (e) {
             e.stopPropagation();
             chatPrompt.style.display = 'none';
-            localStorage.setItem('promptDismissed', '1');
         });
     }
     if (chatPrompt) {
         chatPrompt.addEventListener('click', function () {
             chatPrompt.style.display = 'none';
-            localStorage.setItem('promptDismissed', '1');
             openChat();
         });
     }
@@ -71,6 +67,35 @@
         chatPanel.style.display = 'flex';
         chatInput.focus();
     }
+
+    // Hero "Ask AI" link
+    var heroAskAI2 = document.getElementById('heroAskAI2');
+    if (heroAskAI2) {
+        heroAskAI2.addEventListener('click', function(e) {
+            e.preventDefault();
+            openChat();
+        });
+    }
+
+    // Project "Ask AI" buttons
+    document.querySelectorAll('.project-ask-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            var query = btn.getAttribute('data-query');
+            openChat();
+            chatInput.value = query;
+            chatForm.dispatchEvent(new Event('submit'));
+        });
+    });
+
+    // Stat "Ask AI" clicks
+    document.querySelectorAll('.stat-chat').forEach(function(stat) {
+        stat.addEventListener('click', function() {
+            var query = stat.getAttribute('data-query');
+            openChat();
+            chatInput.value = query;
+            chatForm.dispatchEvent(new Event('submit'));
+        });
+    });
 
     chatClose.addEventListener('click', function (e) {
         e.preventDefault();
@@ -153,7 +178,7 @@
                             }
                             if (data.session_id) sessionId = data.session_id;
                             if (data.stage) showStatus(formatStage(data.stage));
-                            if (data.questions_answered) incrementCounter(data.questions_answered);
+                            if (data.questions_asked && questionsEl) questionsEl.textContent = data.questions_asked;
                         } catch (err) {}
                     }
                 }
@@ -216,16 +241,9 @@
         return ['Tell me about his AI experience', 'What projects has he built?'];
     }
 
-    function incrementCounter(serverCount) {
-        if (serverCount) {
-            questionsAnswered = serverCount;
-        } else {
-            questionsAnswered++;
-        }
-        if (questionsEl) questionsEl.textContent = questionsAnswered;
-    }
-
     function formatMarkdown(text) {
+        // Normalize multiple newlines to max 2
+        text = text.replace(/\n{3,}/g, '\n\n');
         var html = escapeHtml(text);
         html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
         html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
@@ -233,9 +251,19 @@
         html = html.replace(/^## (.+)$/gm, '<h3>$1</h3>');
         html = html.replace(/^\* (.+)/gm, '<li>$1</li>');
         html = html.replace(/^- (.+)/gm, '<li>$1</li>');
-        html = html.replace(/(<li>.*<\/li>\n?)+/g, '<ul>$&</ul>');
-        html = html.replace(/\n\n+/g, '<br>');
-        html = html.replace(/\n/g, '<br>');
+        // Wrap consecutive list items in ul, remove any br between them
+        html = html.replace(/(<li>.*?<\/li>\s*)+/g, function(match) {
+            return '<ul>' + match.replace(/<br\s*\/?>/g, '').replace(/\n/g, '') + '</ul>';
+        });
+        // Paragraphs
+        html = html.replace(/\n\n/g, '</p><p>');
+        html = html.replace(/\n/g, ' ');
+        html = '<p>' + html + '</p>';
+        html = html.replace(/<p>\s*<\/p>/g, '');
+        html = html.replace(/<p>\s*(<h[34]>)/g, '$1');
+        html = html.replace(/(<\/h[34]>)\s*<\/p>/g, '$1');
+        html = html.replace(/<p>\s*(<ul>)/g, '$1');
+        html = html.replace(/(<\/ul>)\s*<\/p>/g, '$1');
         return html;
     }
 

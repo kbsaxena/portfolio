@@ -80,6 +80,10 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         if request.url.path in self._SKIP_PATHS:
             return await call_next(request)
 
+        # Skip rate limiting in development mode
+        if settings.environment == "development":
+            return await call_next(request)
+
         ip = request.client.host if request.client else "unknown"
         record = self._get_record(ip)
 

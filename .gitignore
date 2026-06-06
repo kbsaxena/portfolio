@@ -50,6 +50,9 @@ huggingface/
 # Qdrant data
 qdrant_data/
 
+# SQLite stats database
+backend/data/stats.db
+
 # Node
 node_modules/
 

@@ -7,6 +7,7 @@
 - Email: kulbhushan.saxena09@gmail.com
 - LinkedIn: https://www.linkedin.com/in/kulbhushansaxena/
 - GitHub: https://github.com/kbsaxena
+- Portfolio: https://kulbhushansaxena.in
 
 ## Professional Synopsis
 
@@ -29,7 +30,7 @@ REST APIs, Microservices Architecture, Kafka, ActiveMQ, IBM MQ, Redis
 AWS, Docker, Kubernetes (EKS), Terraform, Helm Charts, Jenkins, Git, Blue-Green Deployments
 
 ### AI & Generative AI
-LLMs, Agentic AI, RAG (Retrieval-Augmented Generation), Amazon Bedrock, Claude, Llama, LangGraph, MCP, Groq, Vector Databases, HuggingFace Embeddings, Sentence Transformers, Cross-Encoder Reranking, Prompt Engineering, AI Agents
+LLMs, Agentic AI, RAG (Retrieval-Augmented Generation), Amazon Bedrock, Claude, Llama, LangGraph, MCP, Groq, AWS Kiro, Amazon Q Developer, Vector Databases, HuggingFace Embeddings, Sentence Transformers, Cross-Encoder Reranking, Prompt Engineering, AI Agents
 
 ### Databases
 PostgreSQL, Oracle DB, SQL Server, MongoDB
@@ -41,7 +42,7 @@ JUnit, Mockito, PowerMock, SonarQube
 HTML, CSS, jQuery, JavaScript
 
 ### Tools & Platforms
-IntelliJ IDEA, Eclipse, Maven, Jira, PuTTY, WinSCP
+IntelliJ IDEA, PyCharm, Visual Studio Code, DBeaver, Eclipse, Maven, Jira, PuTTY, WinSCP
 
 ## Professional Experience
 
@@ -50,7 +51,7 @@ IntelliJ IDEA, Eclipse, Maven, Jira, PuTTY, WinSCP
 Domain: R&D Engineering
 
 #### Enterprise AI Chat Platform
-- Architected and developed an enterprise AI chat platform enabling industrial customers to interact with product documentation and analyze files using natural language support across 6 languages.
+- Architected and developed an enterprise AI chat platform enabling industrial customers to interact with product documentation and analyze files using natural language support across 7 languages (English, Spanish, French, German, Japanese, Chinese, and Dutch).
 - Designed a multi-agent AI workflow consisting of 9 specialized agents using AWS Bedrock (Claude, Llama 4) and Strands Agents SDK for intent detection, SQL generation, RAG pipelines, re-ranking, and multi-modal document processing.
 - Built a natural language-to-SQL engine with 7-layer validation, row-level security enforcement, Neptune Analytics knowledge graph integration, and MCP (Model Context Protocol) based query execution.
 - Engineered real-time streaming infrastructure using FastAPI, Redis Streams, and Server-Sent Events (SSE), enabling low-latency token streaming and sub-second response delivery.
@@ -93,10 +94,16 @@ Product: Overture – Loan Origination System
 ### BE – Information Technology
 LNCT College, Bhopal | 79% (Honors)
 
+### Senior Secondary (12th)
+St. Joseph's School, MP | 78.6%
+
+### High School (10th)
+St. Joseph's School, MP | 82.2%
+
 ## Personal Projects
 
 ### Portfolio Website with AI Personal Assistant
 - Developed an AI-powered conversational assistant integrated into a personal portfolio website using RAG, hybrid search, and vector embeddings.
-- Engineered multi-agent intent routing using LangChain, LLM-based classification, and specialized AI tools for search, summarization, and conversational workflows.
-- Built real-time streaming responses using FastAPI, SSE, semantic caching, and Qdrant vector database integration.
-- Implemented production-grade capabilities including session management, security controls, rate limiting, and conversation persistence.
+- Engineered multi-tool intent routing using LLM-based query classification and specialized AI tools for retrieval, web search, summarization, and conversational workflows.
+- Built real-time streaming responses using FastAPI, Server-Sent Events (SSE), and Qdrant vector database with dense embedding search.
+- Implemented production-grade capabilities including session management, prompt injection guardrails, circuit breaker patterns, rate limiting, and conversation persistence.

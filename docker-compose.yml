@@ -40,6 +40,8 @@ services:
       - SEARXNG_URL=http://searxng:8080
     env_file:
       - .env
+    volumes:
+      - backend_data:/app/data
     depends_on:
       qdrant:
         condition: service_healthy
@@ -122,3 +124,4 @@ networks:
 
 volumes:
   qdrant_data:
+  backend_data:

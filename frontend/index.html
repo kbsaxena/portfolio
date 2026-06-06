@@ -25,6 +25,7 @@
     </script>
 </head>
 <body>
+    <canvas class="bg-canvas" id="bgCanvas" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:0;pointer-events:none;display:block;"></canvas>
     <header class="header">
         <nav class="nav">
             <a href="#hero" class="nav-brand"><span class="logo-k">K</span><span class="logo-b">B</span></a>
@@ -33,7 +34,7 @@
                 <li><a href="#skills">Skills</a></li>
                 <li><a href="#experience">Experience</a></li>
                 <li><a href="#projects">Projects</a></li>
-                <li><a href="#dsa">Algorithms</a></li>
+                <li><a href="#dsa">Building Blocks</a></li>
                 <li><a href="#contact">Contact</a></li>
                 <li><a href="#under-the-hood">Under the Hood</a></li>
             </ul>
@@ -43,21 +44,22 @@
     <main class="main">
         <!-- Hero -->
         <section id="hero" class="hero section">
-            <div class="hero-badge"><a href="#under-the-hood">🤖 AI-Powered Portfolio — see how it works ↓</a></div>
+            <div class="hero-badge"><a href="/assets/docs/kulbhushan-resume.pdf" download="Kulbhushan-Saxena-Resume.pdf" data-tooltip="Download my resume as PDF">🟢 Available for Senior Roles</a><a href="#under-the-hood" data-tooltip="See the architecture behind this site">🤖 AI-Powered Portfolio ↓</a><a href="#" id="heroAskAI2" data-tooltip="Chat with my AI assistant">💬 Ask the AI assistant anything</a></div>
             <h1>Kulbhushan Saxena</h1>
             <p class="hero-subtitle">Senior Software Lead | AI & Backend Architect</p>
             <p class="hero-tagline">I build systems that think. From 9-agent AI pipelines to real-time streaming — architecting the future of enterprise software.</p>
-            <p class="hero-description">13.5 years of experience across Java, Python, Spring Boot, Microservices, and AWS. Currently leading AI platform development at Hexagon with multi-agent RAG, NL-to-SQL, and production LLM integrations. <strong>↓ Ask the AI assistant anything about me.</strong></p>
+            <p class="hero-description">From building microservices that handle millions of requests to designing AI agents that reason across 7 languages — 13.5 years of turning "that's impossible" into production systems. I don't just write code; I architect solutions that compound in value.</p>
             <div class="hero-links">
                 <a href="https://www.linkedin.com/in/kulbhushansaxena/" target="_blank" rel="noopener" class="btn btn-primary">LinkedIn</a>
                 <a href="https://github.com/kbsaxena" target="_blank" rel="noopener" class="btn btn-secondary">GitHub</a>
                 <a href="mailto:kulbhushan.saxena09@gmail.com" class="btn btn-secondary">Email</a>
             </div>
             <div class="hero-stats">
-                <div class="stat"><span class="stat-number">13.5</span><span class="stat-label">Years Experience</span></div>
-                <div class="stat"><span class="stat-number">9</span><span class="stat-label">AI Agents Built</span></div>
-                <div class="stat"><span class="stat-number">6</span><span class="stat-label">Languages Supported</span></div>
-                <div class="stat"><span class="stat-number" id="questionsAnswered">47</span><span class="stat-label">Questions Answered</span></div>
+                <div class="stat stat-chat" data-query="Tell me about Kulbhushan's 13.5 years of experience"><span class="stat-number">13.5</span><span class="stat-label">Years Experience</span></div>
+                <div class="stat stat-chat" data-query="Tell me about the 9 AI agents Kulbhushan built"><span class="stat-number">9</span><span class="stat-label">AI Agents Built</span></div>
+                <div class="stat stat-chat" data-query="What are the 7 languages supported in the AI platform?"><span class="stat-number">7</span><span class="stat-label">Languages Supported</span></div>
+                <div class="stat stat-chat" data-query="What kind of questions do people ask about Kulbhushan?"><span class="stat-number" id="questionsAsked">0</span><span class="stat-label">Questions Asked Till Date</span></div>
+                <div class="stat stat-chat" data-query="Tell me about Kulbhushan's portfolio website"><span class="stat-number" id="visitorsCount">0</span><span class="stat-label">Visitors Till Date</span></div>
             </div>
         </section>
 
@@ -76,7 +78,7 @@
             <h2>Technical Skills</h2>
             <p class="section-subtitle">Click any skill to see how I apply it</p>
             <div class="skill-grid">
-                <div class="skill-card"><h3>🧠 AI & Generative AI</h3><p>LLMs, Agentic AI, RAG, Amazon Bedrock, Claude, Llama, LangGraph, MCP, Groq, Vector Databases, HuggingFace Embeddings, Sentence Transformers, Cross-Encoder Reranking, Prompt Engineering, AI Agents</p><div class="skill-detail hidden"><strong>Applied:</strong> Built 9-agent AI pipeline with RAG, hybrid search (dense + sparse vectors), NL-to-SQL with 7-layer validation, real-time streaming.</div></div>
+                <div class="skill-card"><h3>🧠 AI & Generative AI</h3><p>LLMs, Agentic AI, RAG, Amazon Bedrock, Claude, Llama, LangGraph, MCP, Groq, AWS Kiro, Amazon Q Developer, Vector Databases, HuggingFace Embeddings, Sentence Transformers, Cross-Encoder Reranking, Prompt Engineering, AI Agents</p><div class="skill-detail hidden"><strong>Applied:</strong> Built 9-agent AI pipeline with RAG, hybrid search (dense + sparse vectors), NL-to-SQL with 7-layer validation, real-time streaming.</div></div>
                 <div class="skill-card"><h3>⚙️ Backend & Frameworks</h3><p>Spring Boot, Spring Core, Spring MVC, Spring REST, Spring Data JPA, Hibernate, JDBC, FastAPI, LangChain</p><div class="skill-detail hidden"><strong>Applied:</strong> Java 21 microservices for data integration platforms. FastAPI backends with async streaming, circuit breakers, and Celery workers.</div></div>
                 <div class="skill-card"><h3>💻 Languages</h3><p>Java, Python, JavaScript, Shell Scripting, XSLT</p><div class="skill-detail hidden"><strong>Applied:</strong> Java for enterprise microservices (13+ years). Python for AI/ML pipelines and FastAPI backends. JavaScript for frontend integrations.</div></div>
                 <div class="skill-card"><h3>☁️ Cloud & DevOps</h3><p>AWS, Docker, Kubernetes (EKS), Terraform, Helm Charts, Jenkins, Git, Blue-Green Deployments</p><div class="skill-detail hidden"><strong>Applied:</strong> Automated infrastructure with K8s + Terraform, reducing DevOps efforts by 40%. Production deployments on AWS with blue-green strategy.</div></div>
@@ -90,13 +92,13 @@
             <h2>Professional Experience</h2>
             <div class="timeline">
                 <div class="timeline-item"><div class="timeline-marker"></div><div class="timeline-content">
-                    <div class="timeline-duration">4+ years</div>
+                    <div class="timeline-duration">5+ years</div>
                     <h3>Senior Software Lead</h3>
                     <p class="timeline-company">Hexagon Capability Centre India Pvt Ltd <span class="company-note">(formerly Infor, now Octave)</span></p>
                     <p class="timeline-date">March 2021 – Present | Domain: R&D Engineering</p>
                     <h4>Enterprise AI Chat Platform</h4>
                     <ul>
-                        <li>Architected and developed an enterprise AI chat platform enabling industrial customers to interact with product documentation and analyze files using natural language support across 6 languages</li>
+                        <li>Architected and developed an enterprise AI chat platform enabling industrial customers to interact with product documentation and analyze files using natural language support across 7 languages (English, Spanish, French, German, Japanese, Chinese, and Dutch)</li>
                         <li>Designed a multi-agent AI workflow consisting of 9 specialized agents using AWS Bedrock (Claude, Llama 4) and Strands Agents SDK for intent detection, SQL generation, RAG pipelines, re-ranking, and multi-modal document processing</li>
                         <li>Built a natural language-to-SQL engine with 7-layer validation, row-level security enforcement, Neptune Analytics knowledge graph integration, and MCP (Model Context Protocol) based query execution</li>
                         <li>Engineered real-time streaming infrastructure using FastAPI, Redis Streams, and Server-Sent Events (SSE), enabling low-latency token streaming and sub-second response delivery</li>
@@ -153,19 +155,19 @@
         <section id="projects" class="section">
             <h2>Projects</h2>
             <div class="project-grid">
-                <div class="project-card"><h3>Enterprise AI Chat Platform</h3><p class="project-tech">PYTHON • FASTAPI • AWS BEDROCK • REDIS STREAMS • QDRANT</p><p>Multi-agent RAG platform with 9 specialized agents, hybrid search, real-time streaming, and multi-tenant security. Serves industrial customers across 6 languages.</p></div>
-                <div class="project-card"><h3>Portfolio AI Assistant</h3><p class="project-tech">PYTHON • FASTAPI • GROQ • BGE-M3 • QDRANT • SEARXNG</p><p>This website! Production-grade AI assistant with RAG hybrid search, multi-tool orchestration, circuit breaker patterns, and Cloudflare Tunnel deployment. MAP@5 = 99.6%.</p></div>
-                <div class="project-card"><h3>Dataflow Studio</h3><p class="project-tech">JAVA 21 • SPRING BOOT • KUBERNETES • TERRAFORM</p><p>Scalable enterprise platform for data integration and workflow automation. Reduced DevOps efforts by 40% with automated infrastructure provisioning.</p></div>
-                <div class="project-card"><h3>Westlaw & KORU Platform</h3><p class="project-tech">JAVA • SPRING BOOT • SPRING INTEGRATION • AWS</p><p>Legal content transformation and delivery for Thomson Reuters. Large-scale content ingestion with XML pipelines and microservices architecture.</p></div>
-                <div class="project-card"><h3>My Verizon Prepaid</h3><p class="project-tech">JAVA 8 • SPRING MVC • ORACLE DB</p><p>Backend services for Verizon's prepaid mobile platform supporting account and service management for high-traffic mobile applications.</p></div>
-                <div class="project-card"><h3>Overture — Loan Origination</h3><p class="project-tech">JAVA • SPRING REST • HIBERNATE • POSTGRESQL</p><p>Enterprise loan origination system focused on underwriting, risk analysis, and automated credit decisioning.</p></div>
+                <div class="project-card"><h3>Enterprise AI Chat Platform</h3><p class="project-tech">PYTHON • FASTAPI • AWS BEDROCK • REDIS STREAMS • QDRANT</p><p>Multi-agent RAG platform with 9 specialized agents, hybrid search, real-time streaming, and multi-tenant security. Serves industrial customers across 7 languages.</p><button class="btn btn-secondary project-ask-btn" data-query="Tell me more about the Enterprise AI Chat Platform project">🤖 Ask AI</button></div>
+                <div class="project-card"><h3>Portfolio AI Assistant</h3><p class="project-tech">PYTHON • FASTAPI • GROQ • BGE-M3 • QDRANT • SEARXNG</p><p>This website! Production-grade AI assistant with RAG hybrid search, multi-tool orchestration, circuit breaker patterns, and Cloudflare Tunnel deployment. MAP@5 = 99.6%.</p><button class="btn btn-secondary project-ask-btn" data-query="Tell me more about the Portfolio AI Assistant project">🤖 Ask AI</button></div>
+                <div class="project-card"><h3>Dataflow Studio</h3><p class="project-tech">JAVA 21 • SPRING BOOT • KUBERNETES • TERRAFORM</p><p>Scalable enterprise platform for data integration and workflow automation. Reduced DevOps efforts by 40% with automated infrastructure provisioning.</p><button class="btn btn-secondary project-ask-btn" data-query="Tell me more about the Dataflow Studio project">🤖 Ask AI</button></div>
+                <div class="project-card"><h3>Westlaw & KORU Platform</h3><p class="project-tech">JAVA • SPRING BOOT • SPRING INTEGRATION • AWS</p><p>Legal content transformation and delivery for Thomson Reuters. Large-scale content ingestion with XML pipelines and microservices architecture.</p><button class="btn btn-secondary project-ask-btn" data-query="Tell me more about the Westlaw and KORU Platform project">🤖 Ask AI</button></div>
+                <div class="project-card"><h3>My Verizon Prepaid</h3><p class="project-tech">JAVA 8 • SPRING MVC • ORACLE DB</p><p>Backend services for Verizon's prepaid mobile platform supporting account and service management for high-traffic mobile applications.</p><button class="btn btn-secondary project-ask-btn" data-query="Tell me more about the My Verizon Prepaid project">🤖 Ask AI</button></div>
+                <div class="project-card"><h3>Overture — Loan Origination</h3><p class="project-tech">JAVA • SPRING REST • HIBERNATE • POSTGRESQL</p><p>Enterprise loan origination system focused on underwriting, risk analysis, and automated credit decisioning.</p><button class="btn btn-secondary project-ask-btn" data-query="Tell me more about the Overture Loan Origination project">🤖 Ask AI</button></div>
             </div>
         </section>
 
         <!-- Engineering Fundamentals (DSA) -->
         <section id="dsa" class="section">
-            <h2>Algorithms & System Design Patterns</h2>
-            <p class="section-subtitle">The building blocks behind every scalable system I architect. 100+ implementations in Java — click to explore.</p>
+            <h2>Building Blocks — DSA & Problem Solving</h2>
+            <p class="section-subtitle">The foundations behind every scalable system I build. 100+ Java implementations — click to explore.</p>
             <div class="dsa-grid" id="dsaGrid">
                 <div class="dsa-card" data-category="arrays_and_arraylists"><span class="dsa-icon">📊</span><h4>Arrays</h4></div>
                 <div class="dsa-card" data-category="dp"><span class="dsa-icon">🧩</span><h4>Dynamic Programming</h4></div>
@@ -205,7 +207,23 @@
         <!-- Education -->
         <section id="education" class="section">
             <h2>Education</h2>
-            <div class="education-grid"><div class="education-card"><h3>BE — Information Technology</h3><p class="edu-institution">LNCT College, Bhopal</p><p class="edu-details">79% (Honors)</p></div></div>
+            <div class="education-grid">
+                <div class="education-card">
+                    <h3>🎓 Bachelor of Engineering — Information Technology</h3>
+                    <p class="edu-institution">LNCT College, Bhopal</p>
+                    <p class="edu-details">Graduated with Honors — 79%</p>
+                </div>
+                <div class="education-card">
+                    <h3>📚 Senior Secondary (12th)</h3>
+                    <p class="edu-institution">St. Joseph's School, MP</p>
+                    <p class="edu-details">78.6%</p>
+                </div>
+                <div class="education-card">
+                    <h3>📖 High School (10th)</h3>
+                    <p class="edu-institution">St. Joseph's School, MP</p>
+                    <p class="edu-details">82.2%</p>
+                </div>
+            </div>
         </section>
 
         <!-- Contact -->
@@ -218,7 +236,8 @@
                         <a href="mailto:kulbhushan.saxena09@gmail.com">📧 kulbhushan.saxena09@gmail.com</a>
                         <a href="https://www.linkedin.com/in/kulbhushansaxena/" target="_blank" rel="noopener">💼 LinkedIn</a>
                         <a href="https://github.com/kbsaxena" target="_blank" rel="noopener">🐙 GitHub</a>
-                        <span>📍 Hyderabad, Telangana, India</span>
+                        <a href="/assets/docs/kulbhushan-resume.pdf" download="Kulbhushan-Saxena-Resume.pdf">📄 Download Resume</a>
+                        <a href="https://maps.google.com/maps?q=Hyderabad,+Telangana,+India" target="_blank" rel="noopener">📍 Hyderabad, Telangana, India</a>
                     </div>
                 </div>
                 <form class="contact-form" id="contactForm">
@@ -331,10 +350,11 @@
     </div>
 
     <footer class="footer">
-        <div class="footer-tech">Built with: FastAPI • Groq • BGE-M3 • Qdrant • SearXNG • Docker</div>
+        <div class="footer-tech">Built with: FastAPI • Groq • BGE-M3 • Qdrant • SearXNG • Docker | Hosted on Oracle Cloud ARM</div>
         <p>© 2026 Kulbhushan Saxena</p>
     </footer>
 
+    <script src="/js/particles.js"></script>
     <script src="/js/chat.js"></script>
     <script src="/js/contact.js"></script>
 </body>
