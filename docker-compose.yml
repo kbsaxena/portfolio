@@ -79,7 +79,7 @@ services:
       retries: 3
 
   searxng:
-    image: searxng/searxng:2024.12.23
+    image: searxng/searxng:latest
     container_name: portfolio-searxng
     restart: unless-stopped
     volumes:
