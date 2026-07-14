@@ -18,7 +18,7 @@ stop:
 
 # Ingest data into Qdrant
 ingest:
-	docker compose exec backend python -m app.ingest
+	docker compose exec backend python -m app.rag.ingest
 
 # View logs
 logs:
