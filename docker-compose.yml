@@ -43,8 +43,7 @@ services:
     volumes:
       - backend_data:/app/data
     depends_on:
-      qdrant:
-        condition: service_healthy
+      - qdrant
     networks:
       - internal
     logging:
@@ -72,12 +71,6 @@ services:
       options:
         max-size: "10m"
         max-file: "3"
-    healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:6333/healthz || exit 1"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
-      start_period: 30s
 
   searxng:
     image: searxng/searxng:latest
