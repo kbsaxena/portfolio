@@ -217,22 +217,22 @@
     }
     function getFollowUps(q) {
         q = q.toLowerCase();
-        // DSA-specific follow-ups based on the actual topic
-        if (q.includes('two sum') || q.includes('array')) return ['How would you optimize this for sorted arrays?', 'What other array problems has he solved?'];
+        // DSA-specific follow-ups — only trigger on clearly DSA-related queries
+        if (q.includes('two sum') || (q.includes('array') && !q.includes('kulbhushan'))) return ['How would you optimize this for sorted arrays?', 'What other array problems has he solved?'];
         if (q.includes('binary search')) return ['When do you use binary search on answer?', 'What is the time complexity of binary search?'];
-        if (q.includes('linked list') || q.includes('reverse')) return ['How to detect a cycle in linked list?', 'What is the difference between singly and doubly linked list?'];
-        if (q.includes('tree') || q.includes('bst') || q.includes('traversal')) return ['What is the difference between BFS and DFS?', 'How to find lowest common ancestor?'];
-        if (q.includes('graph') || q.includes('bfs') || q.includes('dfs') || q.includes('dijkstra')) return ['How to detect cycles in a directed graph?', 'What is topological sort used for?'];
-        if (q.includes('dp') || q.includes('dynamic') || q.includes('knapsack') || q.includes('fibonacci')) return ['What is the difference between memoization and tabulation?', 'How to identify if a problem needs DP?'];
-        if (q.includes('sort') || q.includes('merge') || q.includes('quick')) return ['Which sorting algorithm is best for large datasets?', 'What is the space complexity of merge sort?'];
-        if (q.includes('stack') || q.includes('queue') || q.includes('parenthes')) return ['What problems are best solved with stacks?', 'How to implement a queue using stacks?'];
-        if (q.includes('heap') || q.includes('priority')) return ['When to use min-heap vs max-heap?', 'How to find kth largest element?'];
-        if (q.includes('greedy')) return ['How to know if greedy approach works?', 'What is the difference between greedy and DP?'];
+        if (q.includes('linked list')) return ['How to detect a cycle in linked list?', 'What is the difference between singly and doubly linked list?'];
+        if (q.includes('traversal') || (q.includes('tree') && !q.includes('decision'))) return ['What is the difference between BFS and DFS?', 'How to find lowest common ancestor?'];
+        if (q.includes('dijkstra') || (q.includes('graph') && !q.includes('kulbhushan'))) return ['How to detect cycles in a directed graph?', 'What is topological sort used for?'];
+        if (q.includes('knapsack') || q.includes('fibonacci') || q.includes('dynamic programming')) return ['What is the difference between memoization and tabulation?', 'How to identify if a problem needs DP?'];
+        if (q.includes('merge sort') || q.includes('quick sort') || q.includes('sorting algorithm')) return ['Which sorting algorithm is best for large datasets?', 'What is the space complexity of merge sort?'];
+        if (q.includes('parenthes') || (q.includes('stack') && q.includes('problem'))) return ['What problems are best solved with stacks?', 'How to implement a queue using stacks?'];
+        if (q.includes('heap') || q.includes('priority queue')) return ['When to use min-heap vs max-heap?', 'How to find kth largest element?'];
+        if (q.includes('greedy algorithm')) return ['How to know if greedy approach works?', 'What is the difference between greedy and DP?'];
         if (q.includes('backtrack') || q.includes('permut') || q.includes('subset')) return ['What is the time complexity of generating permutations?', 'How is backtracking different from brute force?'];
-        if (q.includes('string') || q.includes('palindrome') || q.includes('anagram')) return ['What string algorithms does he know?', 'How to check if two strings are anagrams?'];
+        if (q.includes('palindrome') || q.includes('anagram')) return ['What string algorithms does he know?', 'How to check if two strings are anagrams?'];
         // Portfolio-specific follow-ups
-        if (q.includes('explain') || q.includes('algorithm') || q.includes('code')) return ['What is the time complexity of this?', 'What real-world problems use this pattern?'];
-        if (q.includes('skill') || q.includes('tech') || q.includes('stack')) return ['How does he apply AI in his work?', 'What cloud platforms has he used?'];
+        if (q.includes('explain') && (q.includes('code') || q.includes('algorithm'))) return ['What is the time complexity of this?', 'What real-world problems use this pattern?'];
+        if (q.includes('skill') || q.includes('tech stack')) return ['How does he apply AI in his work?', 'What cloud platforms has he used?'];
         if (q.includes('ai') || q.includes('rag') || q.includes('agent') || q.includes('llm')) return ['How many agents did he build?', 'What is the RAG architecture he uses?'];
         if (q.includes('experience') || q.includes('work') || q.includes('hexagon') || q.includes('epam')) return ['What was his biggest achievement?', 'How long has he worked with Java?'];
         if (q.includes('project') || q.includes('portfolio') || q.includes('dataflow')) return ['How does this AI assistant work?', 'What is the tech stack of this site?'];
