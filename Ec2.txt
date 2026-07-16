@@ -1,0 +1,6 @@
+ssh ubuntu@129.159.232.117 -i D:/project/source-code/portfolio/keys/ssh-key-2026-07-08.key
+
+supabase - For DB
+
+https://kbsaxena.in/
+

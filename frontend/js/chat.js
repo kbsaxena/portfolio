@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    var API_URL = '/api/chat';
+    var API_URL = 'https://api.kbsaxena.in/api/chat';
     var sessionId = null;
     var isSending = false;
 
@@ -22,7 +22,7 @@
     var visitorsEl = document.getElementById('visitorsCount');
 
     // Fetch global stats from server
-    fetch('/api/stats').then(function(r) { return r.json(); }).then(function(data) {
+    fetch('https://api.kbsaxena.in/api/stats').then(function(r) { return r.json(); }).then(function(data) {
         if (data.questions_asked !== undefined && questionsEl) questionsEl.textContent = data.questions_asked;
         if (data.visitors !== undefined && visitorsEl) visitorsEl.textContent = data.visitors;
     }).catch(function() {});
@@ -374,7 +374,7 @@
         dsaProblems.style.display = 'block';
         codePreview.style.display = 'none';
         try {
-            var res = await fetch('/api/dsa/categories/' + category);
+            var res = await fetch('https://api.kbsaxena.in/api/dsa/categories/' + category);
             var data = await res.json();
             if (!data.problems || !data.problems.length) { dsaProblemList.innerHTML = '<p>No problems found.</p>'; return; }
             dsaProblemList.innerHTML = '';
@@ -394,7 +394,7 @@
         codePreview.style.display = 'block';
         currentFileName = displayName;
         try {
-            var res = await fetch('/api/dsa/code/' + category + '/' + filename);
+            var res = await fetch('https://api.kbsaxena.in/api/dsa/code/' + category + '/' + filename);
             var data = await res.json();
             if (data.code) { currentCode = data.code; typeCode(data.code, codeContent); }
             else codeContent.textContent = 'Failed to load.';

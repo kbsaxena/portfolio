@@ -22,7 +22,7 @@
         status.textContent = '';
 
         try {
-            var res = await fetch('/api/contact', {
+            var res = await fetch('https://api.kbsaxena.in/api/contact', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ name: name, email: email, message: message }),
