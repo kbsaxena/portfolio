@@ -25,7 +25,7 @@
             var res = await fetch('https://api.kbsaxena.in/api/contact', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name: name, email: email, message: message }),
+                body: JSON.stringify({ name: name, email: email, subject: 'Portfolio Contact Form', message: message }),
             });
             var data = await res.json();
             if (res.ok) { status.textContent = 'Message sent successfully!'; status.style.color = '#10b981'; form.reset(); }
